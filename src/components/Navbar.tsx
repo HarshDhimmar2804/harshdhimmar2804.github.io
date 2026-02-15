@@ -52,21 +52,25 @@ export const Navbar: React.FC = () => {
         e.preventDefault();
         setIsOpen(false);
         
-        const targetId = href.replace('#', '');
-        const element = document.getElementById(targetId);
-        
-        if (element) {
-            const offset = 80; // Account for navbar height
-            const bodyRect = document.body.getBoundingClientRect().top;
-            const elementRect = element.getBoundingClientRect().top;
-            const elementPosition = elementRect - bodyRect;
-            const offsetPosition = elementPosition - offset;
+        // Small delay to allow menu animation to start and avoid layout conflicts
+        setTimeout(() => {
+            const targetId = href.replace('#', '');
+            const element = document.getElementById(targetId);
+            
+            if (element) {
+                const offset = 90; // Exact navbar height offset
+                const elementPosition = element.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - offset;
 
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
-        }
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+                
+                // Update URL hash manually
+                window.history.pushState(null, '', href);
+            }
+        }, 100);
     };
 
     const navLinks = [
@@ -101,17 +105,23 @@ export const Navbar: React.FC = () => {
                                     key={item.name}
                                     href={item.href}
                                     onClick={(e) => handleScrollTo(e, item.href)}
-                                    className={`text-sm font-black tracking-widest uppercase transition-all relative ${
-                                        isActive ? 'text-brand-highlight' : 'text-slate-400 hover:text-white'
+                                    className={`text-sm font-black tracking-widest uppercase transition-all relative py-2 group ${
+                                        isActive ? 'text-white' : 'text-slate-400 hover:text-white'
                                     }`}
                                 >
-                                    {item.name}
+                                    <span className="relative z-10">{item.name}</span>
                                     {isActive && (
                                         <motion.div 
                                             layoutId="activeNav"
-                                            className="absolute -bottom-1 left-0 right-0 h-0.5 bg-brand-highlight rounded-full"
+                                            className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-brand-accent to-brand-highlight rounded-full shadow-[0_0_8px_rgba(var(--brand-accent-rgb),0.6)]"
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ duration: 0.3 }}
                                         />
                                     )}
+                                    <motion.div 
+                                        className="absolute -bottom-1 left-0 right-0 h-0.5 bg-white/20 rounded-full scale-x-0 group-hover:scale-x-100 transition-transform origin-left"
+                                    />
                                 </a>
                             );
                         })}
@@ -140,9 +150,9 @@ export const Navbar: React.FC = () => {
             <motion.div
                 initial={false}
                 animate={isOpen ? { height: 'auto', opacity: 1, marginTop: '1rem' } : { height: 0, opacity: 0, marginTop: 0 }}
-                className="md:hidden overflow-hidden glass rounded-3xl border border-white/10 shadow-2xl"
+                className="md:hidden overflow-hidden glass rounded-3xl border border-white/10 shadow-2xl relative z-[100] pointer-events-auto"
             >
-                <div className="p-8 flex flex-col gap-6">
+                <div className="p-8 flex flex-col gap-4">
                     {navLinks.map((item) => {
                         const isActive = activeSection === item.href.replace('#', '');
                         return (
@@ -150,11 +160,27 @@ export const Navbar: React.FC = () => {
                                 key={item.name}
                                 href={item.href}
                                 onClick={(e) => handleScrollTo(e, item.href)}
-                                className={`text-xl font-black uppercase tracking-widest transition-colors ${
-                                    isActive ? 'text-brand-highlight' : 'text-slate-300 hover:text-white'
+                                className={`text-xl font-black uppercase tracking-widest transition-all relative px-6 py-4 rounded-2xl flex items-center justify-between group overflow-hidden ${
+                                    isActive ? 'text-white' : 'text-slate-400'
                                 }`}
                             >
-                                {item.name}
+                                <span className="relative z-10">{item.name}</span>
+                                {isActive ? (
+                                    <>
+                                        <motion.div 
+                                            layoutId="mobileActivePill"
+                                            className="absolute inset-0 bg-gradient-to-r from-brand-accent/20 to-brand-highlight/20 border border-white/10"
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                        />
+                                        <motion.div 
+                                            layoutId="mobileActiveDot"
+                                            className="w-2 h-2 rounded-full bg-brand-highlight shadow-[0_0_10px_#646cff]"
+                                        />
+                                    </>
+                                ) : (
+                                    <div className="w-1.5 h-1.5 rounded-full bg-white/5 group-hover:bg-white/20 transition-colors" />
+                                )}
                             </a>
                         );
                     })}

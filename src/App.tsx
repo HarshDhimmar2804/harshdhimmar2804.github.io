@@ -20,22 +20,12 @@ function App() {
       <Navbar />
 
       <div className="relative z-10">
-        <section id="home" className="scroll-mt-24">
-          <Hero />
-        </section>
-        <section id="about" className="scroll-mt-24">
-          <About />
-        </section>
-        <section id="skills" className="scroll-mt-24">
-          <Skills />
-        </section>
-        <section id="work" className="scroll-mt-24">
-          <Projects />
-          <Experience />
-        </section>
-        <section id="contact" className="scroll-mt-24">
-          <Contact />
-        </section>
+        <Hero />
+        <About />
+        <Skills />
+        <Projects />
+        <Experience />
+        <Contact />
 
         <footer className="py-4 text-center text-slate-400 dark:text-slate-500 text-sm border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950 transition-colors duration-300">
           <div className="max-w-6xl mx-auto px-6">

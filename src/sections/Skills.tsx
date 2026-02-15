@@ -23,7 +23,7 @@ const skillCategories = [
 
 export const Skills: React.FC = () => {
     return (
-        <section id="skills" className="py-24 px-6 max-w-6xl mx-auto">
+        <section id="skills" className="py-24 px-6 max-w-6xl mx-auto scroll-mt-24">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}

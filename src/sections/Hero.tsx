@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 export const Hero: React.FC = () => {
     return (
-        <section id="home" className="min-h-screen flex flex-col items-center justify-center relative px-6 pt-20 md:pt-0 overflow-hidden">
+        <section id="home" className="min-h-screen flex flex-col items-center justify-center relative px-6 pt-20 md:pt-0 overflow-hidden scroll-mt-24">
             {/* Animated Background Blobs */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                 <motion.div
